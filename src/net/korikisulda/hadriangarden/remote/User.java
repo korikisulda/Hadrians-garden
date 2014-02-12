@@ -2,6 +2,20 @@ package net.korikisulda.hadriangarden.remote;
 
 public class User {
 	
+	private String token="";
+	
+	public User(String email,String password){
+		this.token=registerUser(email,password);
+	}
+	
+	public User(String token){
+		this.token=token;
+	}
+	
+	public String getToken(){
+		return token;
+	}
+	
 	/**
 	 * Registers a user with an email address and password
 	 * @param email Email address of user. This should probably be valid, but the backend doesn't care at the moment
