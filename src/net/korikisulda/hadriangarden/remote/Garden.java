@@ -18,7 +18,8 @@ public class Garden {
 	}
 	
 	public static void main(String[] args){
-		System.out.println(new Garden().getUrl());
+		//System.out.println(new Garden().getUrl());
+		System.out.println(new User("noreply@korikisulda.net","ThisIsAPassword").getToken());
 	}
 
 	/**
@@ -30,7 +31,7 @@ public class Garden {
         CloseableHttpClient httpclient= httpBuilder.build();
         JSONObject json;
 
-        HttpGet httpGet = new HttpGet("https://bowdlerize.co.uk/api/1.1/request/httpt");
+        HttpGet httpGet = new HttpGet("http://korikisulda.net/api/1.2/request/httpt");
         httpGet.setHeader("Accept", "application/json");
 
         try
