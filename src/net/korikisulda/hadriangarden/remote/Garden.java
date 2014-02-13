@@ -18,8 +18,12 @@ public class Garden {
 	}
 	
 	public static void main(String[] args){
-		//System.out.println(new Garden().getUrl());
-		System.out.println(new User("noreply@korikisulda.net","ThisIsAPassword").getToken());
+		//oOoOQ7ApjIM89FhJ1ouVOjnh8sl5qiIP76DX
+		//System.out.println(new User("noreply@korikisulda.net","ThisIsAPassword").getToken());
+		new User("oOoOQ7ApjIM89FhJ1ouVOjnh8sl5qiIP76DX"){{
+			setEmail("noreply@korikisulda.net");
+			System.out.println(getStatus());
+		}};
 	}
 
 	/**
