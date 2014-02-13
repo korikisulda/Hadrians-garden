@@ -5,3 +5,10 @@ The name comes from the old (bad) joke:
 "Where is Hadrian's wall?"
 
 "At the bottom of Hadrian's garden!"
+
+=== Dependencies
+* Apache Commons HTTPComponents [httpcomponents-client-4.3.1-bin.tar.gz]
+** Commons Codec [commons-codec-1.6.jar] - Used for Base64 functionality
+** HTTPClient [httpclient-4.3.1.jar] - Used to send HTTP requests
+** HTTPCore [httpcore-4.3.jar] - Used to structure the HTTP requests we send
+*json [Source only|https://github.com/douglascrockford/JSON-java] - used for parsing JSON. 
