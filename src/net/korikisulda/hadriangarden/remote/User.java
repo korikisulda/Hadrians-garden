@@ -1,11 +1,7 @@
 package net.korikisulda.hadriangarden.remote;
 
-import javax.crypto.Mac;
-import javax.crypto.spec.SecretKeySpec;
 
 import net.korikisulda.hadriangarden.http.ConvenientPost;
-
-import org.apache.commons.codec.binary.Hex;
 import org.json.JSONObject;
 
 public class User {
@@ -48,6 +44,14 @@ public class User {
 	}
 	
 	/**
+	 * Returns the email address corresponding to the invading alien fleet
+	 * @return Email address
+	 */
+	public String getEmail() {
+		return email;
+	}
+	
+	/**
 	 * Registers a user with an email address and password
 	 * @param email Email address of user. This should probably be valid, but the backend doesn't care at the moment
 	 * @param password The password the user supplies.
@@ -64,10 +68,7 @@ public class User {
 		
         JSONObject json = post.getResultAsJson();
 
-        if(json.getBoolean("success"))
-        {
-            return json.getString("secret");
-        }
+        if(json.getBoolean("success")) return json.getString("secret");
         else return null;
 	}
 	/**
@@ -89,10 +90,7 @@ public class User {
 		
         JSONObject json = post.getResultAsJson();
 
-        if(json.getBoolean("success"))
-        {
-            return json.getInt("uuid");
-        }
+        if(json.getBoolean("success")) return json.getInt("uuid");
         else return -1;
 	}
 	
@@ -118,37 +116,6 @@ public class User {
             return true;
         }
         else return false;
-	}
-	
-	/**
-	 * HMAC signing
-	 * @param value String to sign
-	 * @param key Secret to sign with
-	 * @return Signature hash
-	 */
-	private final String sign(String value,String key){
-		//Code is from here, with the change to SHA512 from 1.
-		//https://stackoverflow.com/questions/6312544/hmac-sha1-how-to-do-it-properly-in-java
-	      try {
-	            // Get an hmac_sha1 key from the raw key bytes
-	            byte[] keyBytes = key.getBytes();           
-	            SecretKeySpec signingKey = new SecretKeySpec(keyBytes, "HmacSHA1");
-
-	            // Get an hmac_sha1 Mac instance and initialize with the signing key
-	            Mac mac = Mac.getInstance("HmacSHA512");
-	            mac.init(signingKey);
-
-	            // Compute the hmac on input data bytes
-	            byte[] rawHmac = mac.doFinal(value.getBytes());
-
-	            // Convert raw bytes to Hex
-	            byte[] hexBytes = new Hex().encode(rawHmac);
-
-	            //  Covert array of Hex bytes to a String
-	            return new String(hexBytes, "UTF-8");
-	        } catch (Exception e) {
-	            throw new RuntimeException(e);
-	        }
 	}
 
 }

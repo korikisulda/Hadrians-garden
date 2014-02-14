@@ -20,9 +20,13 @@ public class Garden {
 	public static void main(String[] args){
 		//oOoOQ7ApjIM89FhJ1ouVOjnh8sl5qiIP76DX
 		//System.out.println(new User("noreply@korikisulda.net","ThisIsAPassword").getToken());
+		new Probe(
 		new User("oOoOQ7ApjIM89FhJ1ouVOjnh8sl5qiIP76DX"){{
 			setEmail("noreply@korikisulda.net");
 			System.out.println(getStatus());
+		}}, "testseed", "gb", ProbeType.RASPBERRY_PI);
+		new Garden(){{
+			System.out.println(getUrl());
 		}};
 	}
 
