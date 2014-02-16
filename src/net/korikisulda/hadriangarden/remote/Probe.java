@@ -10,6 +10,7 @@ public class Probe {
 	public Probe(User userFor,String uuid){
 		this.uuid=uuid;
 	}
+	
 	public Probe(User userFor,String seed,String country,ProbeType probeType){
 		this(userFor,"");
 		uuid=registerProbe(userFor.getEmail(),country,seed,probeType,userFor);
@@ -24,8 +25,6 @@ public class Probe {
 			setUrl("http://korikisulda.net/api/1.2/register/probe");
 			add("signature",sign(email,user.getToken()));
 			add("probe_uuid",md5sum(seed + "-" + user.getToken()));
-			System.out.println(md5sum(seed + "-" + user.getToken()));
-			System.out.println(seed + "-" + user.getToken());
 		}};
 		
 		if(!post.execute()) return null;

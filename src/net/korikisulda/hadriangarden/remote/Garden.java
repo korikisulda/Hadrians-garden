@@ -24,6 +24,7 @@ public class Garden {
 		new User("oOoOQ7ApjIM89FhJ1ouVOjnh8sl5qiIP76DX"){{
 			setEmail("noreply@korikisulda.net");
 			System.out.println(getStatus());
+			System.out.println(requestProbeToken());
 		}}, "testseed", "gb", ProbeType.RASPBERRY_PI);
 		new Garden(){{
 			System.out.println(getUrl());

@@ -117,5 +117,26 @@ public class User {
         }
         else return false;
 	}
+	
+	public String requestProbeToken(){
+		final String token=getToken();
+		ConvenientPost post=new ConvenientPost(){{
+			add("email",email);
+			add("signature",sign(email,token));
+			
+			setUrl("http://korikisulda.net/api/1.2/prepare/probe");
+		}};
+		
+		if(!post.execute()) return null;
+		
+		System.out.println(post.getResult());
+        JSONObject json = post.getResultAsJson();
+
+        if(json.getBoolean("success"))
+        {
+            return json.getString("probe_hmac");
+        }
+        else return null;
+	}
 
 }
