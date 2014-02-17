@@ -118,6 +118,10 @@ public class User {
         else return false;
 	}
 	
+	/**
+	 * Requests a probe secret from the API
+	 * @return Probe secret, or null, if failure
+	 */
 	public String requestProbeToken(){
 		final String token=getToken();
 		ConvenientPost post=new ConvenientPost(){{

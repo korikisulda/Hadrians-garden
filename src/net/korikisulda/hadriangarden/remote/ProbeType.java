@@ -11,6 +11,10 @@ public enum ProbeType {
 		this.name=name;
 	}
 	
+	/**
+	 * Gets the server readable name of this probe-type
+	 * @return Server-readable type name
+	 */
 	public String getName(){
 		return name;
 	}
