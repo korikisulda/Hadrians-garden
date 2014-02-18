@@ -3,7 +3,10 @@ package net.korikisulda.hadriangarden.remote;
 import net.korikisulda.hadriangarden.http.ConvenientPost;
 
 import org.json.JSONObject;
-
+/**
+ * Represents a probe.
+ * You'll need a User to initialise this.
+ */
 public class Probe {
 	private String uuid;
 	
