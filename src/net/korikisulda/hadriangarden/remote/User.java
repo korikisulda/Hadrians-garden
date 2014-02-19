@@ -8,6 +8,7 @@ public class User {
 	
 	private String token="";
 	private String email="";
+	private String probeToken="";
 	/**
 	 * Constructs a user with an email address and password. This will cause the user to be registered
 	 * With the backend. Use getToken() after this, and make sure you save the token.
@@ -23,8 +24,10 @@ public class User {
 	 * You must provide the email address using setEmail() after this.
 	 * @param token Shared secret issued by server
 	 */
-	public User(String token){
+	public User(String email,String token,String probeToken){
+		this.email=email;
 		this.token=token;
+		this.probeToken=probeToken;
 	}
 	
 	/**
@@ -41,6 +44,13 @@ public class User {
 	 */
 	public String getToken(){
 		return token;
+	}
+	
+	/**
+	 * 
+	 */
+	public String getProbeToken(){
+		return probeToken;
 	}
 	
 	/**
@@ -102,7 +112,8 @@ public class User {
 		final String token=getToken();
 		ConvenientPost post=new ConvenientPost(){{
 			add("email",email);
-			add("signature",sign(email,token));
+			add("date",getDate());
+			add("signature",sign(email + ":" + getDate(),token));
 			
 			setUrl("http://korikisulda.net/api/1.2/status/user");
 		}};
@@ -126,8 +137,8 @@ public class User {
 		final String token=getToken();
 		ConvenientPost post=new ConvenientPost(){{
 			add("email",email);
-			add("signature",sign(email,token));
-			
+			add("signature",sign(email + ":" + getDate(),token));
+			add("date",getDate());
 			setUrl("http://korikisulda.net/api/1.2/prepare/probe");
 		}};
 		
@@ -138,6 +149,7 @@ public class User {
 
         if(json.getBoolean("success"))
         {
+        	probeToken=json.getString("probe_hmac");
             return json.getString("probe_hmac");
         }
         else return null;

@@ -2,7 +2,9 @@ package net.korikisulda.hadriangarden.http;
 
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import javax.crypto.Mac;
@@ -112,5 +114,12 @@ public class ConvenientPost {
 			e.printStackTrace();
 		}
 		return null;
+	}
+	
+	protected String getDate(){
+        SimpleDateFormat dateFormat = new SimpleDateFormat();
+        Date date = new Date();
+		dateFormat.applyPattern("y-M-d H:m");
+		return dateFormat.format(date);
 	}
 }
