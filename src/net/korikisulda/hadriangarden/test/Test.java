@@ -15,7 +15,7 @@ public class Test {
 		//Use this first,then comment it out and use the next.
 		//Make sure you fill in everything correctly. You need to register to get the token.
 		register("emailhere","passwordhere");
-		//probeFun("emailhere","BuRGN2Dw0ljQrgTshAPM6phgB4qb9NJKhAr4");
+		//probeFun("emailhere","tokenhere");
 	}
 	
 	public void register(String email,String password){
