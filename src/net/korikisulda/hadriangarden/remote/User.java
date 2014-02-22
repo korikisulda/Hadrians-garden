@@ -69,9 +69,9 @@ public class User {
 	 */
 	private String registerUser(final String email,final String password){
 		ConvenientPost post=new ConvenientPost(){{
+			setUrl("http://korikisulda.net/api/1.2/register/user");
 			add("email",email);
 			add("password",password);
-			setUrl("http://korikisulda.net/api/1.2/register/user");
 		}};
 		
 		if(!post.execute()) return null;
@@ -89,11 +89,10 @@ public class User {
 	public int submitUrl(final String url){
 		final String token=getToken();
 		ConvenientPost post=new ConvenientPost(){{
+			setUrl("http://korikisulda.net/api/1.2/submit/url");
 			add("email",email);
 			add("url",url);
 			add("signature",sign(url,token));
-			
-			setUrl("http://korikisulda.net/api/1.2/submit/url");
 		}};
 		
 		if(!post.execute()) return -1;
@@ -111,11 +110,10 @@ public class User {
 	public boolean getStatus(){
 		final String token=getToken();
 		ConvenientPost post=new ConvenientPost(){{
+			setUrl("http://korikisulda.net/api/1.2/status/user");
 			add("email",email);
 			add("date",getDate());
 			add("signature",sign(email + ":" + getDate(),token));
-			
-			setUrl("http://korikisulda.net/api/1.2/status/user");
 		}};
 		
 		if(!post.execute()) return false;
@@ -136,10 +134,10 @@ public class User {
 	public String requestProbeToken(){
 		final String token=getToken();
 		ConvenientPost post=new ConvenientPost(){{
+			setUrl("http://korikisulda.net/api/1.2/prepare/probe");
 			add("email",email);
 			add("signature",sign(email + ":" + getDate(),token));
 			add("date",getDate());
-			setUrl("http://korikisulda.net/api/1.2/prepare/probe");
 		}};
 		
 		if(!post.execute()) return null;

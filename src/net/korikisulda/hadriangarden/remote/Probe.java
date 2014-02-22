@@ -26,11 +26,11 @@ public class Probe {
 		
 		ConvenientPost post=new ConvenientPost(){{
 			String probeUuid=md5sum(seed + "-" + user.getProbeToken());
+			setUrl("http://korikisulda.net/api/1.2/register/probe");
 			add("email",email);
 			add("probe_seed",seed);
 			add("probe_type",probeType.getName());
 			add("cc",country);
-			setUrl("http://korikisulda.net/api/1.2/register/probe");
 			add("signature",sign(probeUuid,user.getToken()));
 			add("probe_uuid",probeUuid);
 			

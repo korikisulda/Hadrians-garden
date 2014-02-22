@@ -1,10 +1,7 @@
 package net.korikisulda.hadriangarden.remote;
 
-import org.apache.http.HttpResponse;
-import org.apache.http.client.methods.HttpGet;
-import org.apache.http.impl.client.CloseableHttpClient;
-import org.apache.http.impl.client.HttpClientBuilder;
-import org.apache.http.util.EntityUtils;
+import net.korikisulda.hadriangarden.http.ConvenientGet;
+
 import org.json.JSONObject;
 
 /**
@@ -19,33 +16,18 @@ public class Garden {
 	 * @return URL returned by backend
 	 */
 	public String getUrl(){
-        HttpClientBuilder httpBuilder = HttpClientBuilder.create(); //No, I don't know either..
-        CloseableHttpClient httpclient= httpBuilder.build();
-        JSONObject json;
+		ConvenientGet get=new ConvenientGet(){{
+			setUrl("http://korikisulda.net/api/1.2/request/httpt");
+		}};
+		
+		if(!get.execute()) return null;
+		
+		JSONObject json=get.getResultAsJson();
+		
+        if(json.getBoolean("success"))
+            return json.getString("url");
+        else return null;
+      }
 
-        HttpGet httpGet = new HttpGet("http://korikisulda.net/api/1.2/request/httpt");
-        httpGet.setHeader("Accept", "application/json");
-
-        try
-        {
-            HttpResponse response = httpclient.execute(httpGet);
-            String rawJSON = EntityUtils.toString(response.getEntity());
-
-            json = new JSONObject(rawJSON);
-
-            if(json.getBoolean("success"))
-            {
-                return json.getString("url");
-            }
-            else
-            {
-                return null;
-            }
-        }
-        catch(Exception e)
-        {
-            e.printStackTrace();
-            return null;
-        }
-	}
+	
 }
