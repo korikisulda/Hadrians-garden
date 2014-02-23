@@ -9,8 +9,11 @@ import javax.crypto.Mac;
 import javax.crypto.spec.SecretKeySpec;
 
 import org.apache.commons.codec.binary.Hex;
+import org.apache.http.HttpResponse;
+import org.apache.http.client.methods.HttpRequestBase;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClientBuilder;
+import org.apache.http.util.EntityUtils;
 import org.json.JSONObject;
 
 public abstract class ConvenientRequest {
@@ -29,7 +32,19 @@ public abstract class ConvenientRequest {
     	return this.URL;
     }
     
-    public abstract boolean execute();
+    public abstract HttpRequestBase getMethod();
+    
+    public boolean execute(){
+    	try{
+	        HttpRequestBase httpRequest = getMethod();
+	        HttpResponse response = httpclient.execute(httpRequest);
+	        result = EntityUtils.toString(response.getEntity());
+	        success=true;
+    	}catch(Exception e){
+    		success=false;
+    	}
+    	return success;
+    }
     
     public boolean getSuccess(){
     	return success;
