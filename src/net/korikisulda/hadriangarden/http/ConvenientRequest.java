@@ -26,6 +26,7 @@ public abstract class ConvenientRequest {
     protected String URL;
     protected String result;
     protected boolean success=false;
+    protected int status=-1;
     
     public void setUrl(String URL){
     	this.URL=URL;
@@ -45,6 +46,8 @@ public abstract class ConvenientRequest {
 	        httpRequest.setHeader("User-Agent",agent);
 	        
 	        HttpResponse response = httpclient.execute(httpRequest);
+	        status=response.getStatusLine().getStatusCode();
+	 
 	        result = EntityUtils.toString(response.getEntity());
 	        success=true;
     	}catch(Exception e){
@@ -61,12 +64,18 @@ public abstract class ConvenientRequest {
     	return result;
     }
     
+    public int getStatus(){
+    	return status;
+    }
+    
     public JSONObject getResultAsJson(){
         return new JSONObject(getResult());
     }
     
     /**
      * Sets the Accept header. application/json by default.
+     * Sample sent by Firefox: "text/html,application/xhtml+xml,application/xml;q=0.9"
+     * Missing off a bit at the end because it contains something that doesn't play nicely with comments.
      * @param accept New accept header
      */
     public void setAccept(String accept){
