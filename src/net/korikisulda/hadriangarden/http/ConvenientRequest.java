@@ -20,6 +20,9 @@ public abstract class ConvenientRequest {
     protected HttpClientBuilder httpBuilder = HttpClientBuilder.create();
     protected CloseableHttpClient httpclient= httpBuilder.build();
     
+    protected String accept="application/json";
+    protected String agent="Claire Perry";
+    
     protected String URL;
     protected String result;
     protected boolean success=false;
@@ -37,6 +40,10 @@ public abstract class ConvenientRequest {
     public boolean execute(){
     	try{
 	        HttpRequestBase httpRequest = getMethod();
+	        
+	        httpRequest.setHeader("Accept",accept);
+	        httpRequest.setHeader("User-Agent",agent);
+	        
 	        HttpResponse response = httpclient.execute(httpRequest);
 	        result = EntityUtils.toString(response.getEntity());
 	        success=true;
@@ -58,6 +65,22 @@ public abstract class ConvenientRequest {
         return new JSONObject(getResult());
     }
     
+    /**
+     * Sets the Accept header. application/json by default.
+     * @param accept New accept header
+     */
+    public void setAccept(String accept){
+    	this.accept=accept;
+    }
+    
+    /**
+     * Sets the User-Agent header. Claire Perry by default (Sorry, couldn't resist..)
+     * @param agent New user-agent
+     */
+    public void setAgent(String agent){
+    	this.agent=agent;
+    }
+        
 	/**
 	 * HMAC signing
 	 * @param value String to sign
