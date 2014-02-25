@@ -14,8 +14,9 @@ public class Test {
 		
 		//Use this first,then comment it out and use the next.
 		//Make sure you fill in everything correctly. You need to register to get the token.
-		register("emailhere","passwordhere");
+		//register("emailhere","passwordhere");
 		//probeFun("emailhere","tokenhere");
+		//moreProbeFun("emailftw","oxgSuaWllWIbElqMoNcX4yUMnKj2iTFGqWyU","BFXCBh1Mk4cmbDa5iPycJaaXqav9eTMQ","lorFtFQjy3gzz5kYZpA0ljWNs6hGYhnkGO09","431bac6d088244be85e385d3fbfe75b8");
 	}
 	
 	public void register(String email,String password){
@@ -38,5 +39,13 @@ public class Test {
 			System.out.println("Probe token is [" + probe.getToken() + "]");
 			System.out.println("And we're done!");
 		}
+	}
+	
+	public void moreProbeFun(String email,String userToken,String userProbeToken,String probeToken, String probeUuid){
+		User user=new User(email,userToken,userProbeToken);
+		
+		Probe probe=new Probe(user,probeUuid,probeToken);
+		
+		System.out.println(probe.getUrl());
 	}
 }

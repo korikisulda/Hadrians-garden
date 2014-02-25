@@ -1,5 +1,6 @@
 package net.korikisulda.hadriangarden.remote;
 
+import net.korikisulda.hadriangarden.http.ConvenientGet;
 import net.korikisulda.hadriangarden.http.ConvenientPost;
 
 import org.json.JSONObject;
@@ -10,18 +11,20 @@ import org.json.JSONObject;
 public class Probe {
 	private String uuid;
 	private String token;
+	private User user;
 	
 	public Probe(User userFor,String uuid, String probeSecret){
 		this.uuid=uuid;
 		this.token=probeSecret;
+		this.user=userFor;
 	}
 	
 	public Probe(User userFor,String seed,String country,ProbeType probeType){
 		this(userFor,"","");
-		token=registerProbe(userFor.getEmail(),country,seed,probeType,userFor);
+		token=registerProbe(userFor.getEmail(),country,seed,probeType);
 	}
 	
-	private String registerProbe(final String email,final String country,final String seed, final ProbeType probeType,final User user){
+	private String registerProbe(final String email,final String country,final String seed, final ProbeType probeType){
 		final Probe probe=this;
 		
 		ConvenientPost post=new ConvenientPost(){{
@@ -55,5 +58,25 @@ public class Probe {
 	
 	public String getToken(){
 		return token;
+	}
+	
+	/**
+	 * Gets a URL the backend wants us to take a look at
+	 * @return URL returned by backend
+	 */
+	public String getUrl(){
+		ConvenientGet get=new ConvenientGet(){{
+			setUrl("http://korikisulda.net/api/1.2/request/httpt");
+			add("signature",sign(getUuid(),getToken()));
+			add("probe_uuid",getUuid());
+		}};
+		
+		if(!get.execute()) return null;
+		
+		JSONObject json=get.getResultAsJson();
+
+        if(json.getBoolean("success"))
+            return json.getString("url");
+        else return null;
 	}
 }
