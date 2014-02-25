@@ -47,7 +47,7 @@ public abstract class ConvenientRequest {
 	        
 	        HttpResponse response = httpclient.execute(httpRequest);
 	        status=response.getStatusLine().getStatusCode();
-	 
+	        System.out.println(status);
 	        result = EntityUtils.toString(response.getEntity());
 	        success=true;
     	}catch(Exception e){

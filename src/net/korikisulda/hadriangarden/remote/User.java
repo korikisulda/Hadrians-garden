@@ -1,6 +1,7 @@
 package net.korikisulda.hadriangarden.remote;
 
 
+import net.korikisulda.hadriangarden.http.ConvenientGet;
 import net.korikisulda.hadriangarden.http.ConvenientPost;
 import org.json.JSONObject;
 
@@ -109,12 +110,14 @@ public class User {
 	 */
 	public boolean getStatus(){
 		final String token=getToken();
-		ConvenientPost post=new ConvenientPost(){{
+		ConvenientGet post=new ConvenientGet(){{
 			setUrl("http://korikisulda.net/api/1.2/status/user");
 			add("email",email);
 			add("date",getDate());
 			add("signature",sign(email + ":" + getDate(),token));
 		}};
+
+
 		
 		if(!post.execute()) return false;
 		
