@@ -80,7 +80,20 @@ public class Probe {
         else return null;
 	}
 	
-	public void sendTestResult(final String url,final int status,final String determinedSimpleStatus,final String config,final String networkName, final String ip){
+	/**
+	 * Submits a URL test result to the remote backend.
+	 * We might need a prettier version at some point (after all, we can combine URL and status using
+	 * a ConvenientRequest, and IP/Network can be handled internally too)
+	 * @param url URL that was tested
+	 * @param status HTTP status code returned
+	 * @param determinedSimpleStatus Do we think it's blocked? It can be 'timeout', 'ok', or 'blocked'
+	 * @param config Config version. I don't think we actually have one yet, so I just say -1.0
+	 * @param networkName Network name! We need to work out standardised names for this
+	 * @param ip IP address. We could get from either a remote host, or through
+	 * 		  A router using UPNP. The server should probably make efforts to check if this is correct.
+	 * @return Success: true if our transmission succeeded, false if it failed for absolutely any reason.
+	 */
+	public boolean sendTestResult(final String url,final int status,final String determinedSimpleStatus,final String config,final String networkName, final String ip){
 		ConvenientPost post=new ConvenientPost(){{
 			String date=getDate();
 			
@@ -109,9 +122,13 @@ public class Probe {
 				));
 		}};
 		
-		if(!post.execute()) return;
+		if(!post.execute()) return false;
 
-		
-		System.out.println(post.getResult());
+		JSONObject json=post.getResultAsJson();
+
+        if(json.getBoolean("success"))
+            return true;
+        else return false;
+        
 	}
 }

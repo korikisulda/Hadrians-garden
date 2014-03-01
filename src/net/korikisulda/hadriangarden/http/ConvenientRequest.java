@@ -96,7 +96,6 @@ public abstract class ConvenientRequest {
 	 * @return Signature hash
 	 */
 	protected String sign(String value,String key){
-		System.out.println(value);
 		//Code is from here, with the change to SHA512 from 1.
 		//https://stackoverflow.com/questions/6312544/hmac-sha1-how-to-do-it-properly-in-java
 	      try {
