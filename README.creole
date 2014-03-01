@@ -1,5 +1,5 @@
 === Hadrian's Garden
-Hadrian's Garden is the ORG probe API I'm going to write for Java once the next version of the specification is determined.
+Hadrian's Garden is the ORG probe library for Java. Currently the only client library afaik..
 The name comes from the old (bad) joke:
 
 "Where is Hadrian's wall?"
