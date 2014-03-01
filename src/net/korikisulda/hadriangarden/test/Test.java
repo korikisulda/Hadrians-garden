@@ -12,11 +12,15 @@ public class Test {
 	public void doThings(){
 		System.out.println("Things in square brackets are things you should keep a record of.");
 		
-		//Use this first,then comment it out and use the next.
-		//Make sure you fill in everything correctly. You need to register to get the token.
+		//Use this first,then comment it out and use the next, and so on. Make sure only one is not commented at a time..
+		//Make sure you fill in everything correctly. You need to register to get the token:
 		//register("emailhere","passwordhere");
+		
+		//And now, we can make our very own probe!
 		//probeFun("emailhere","tokenhere");
-		//moreProbeFun("emailftw","oxgSuaWllWIbElqMoNcX4yUMnKj2iTFGqWyU","BFXCBh1Mk4cmbDa5iPycJaaXqav9eTMQ","lorFtFQjy3gzz5kYZpA0ljWNs6hGYhnkGO09","431bac6d088244be85e385d3fbfe75b8");
+		
+		//But would that be nearly so fun if we didn't get URLs and submit results?
+		moreProbeFun("emailftw","oxgSuaWllWIbElqMoNcX4yUMnKj2iTFGqWyU","BFXCBh1Mk4cmbDa5iPycJaaXqav9eTMQ","lorFtFQjy3gzz5kYZpA0ljWNs6hGYhnkGO09","431bac6d088244be85e385d3fbfe75b8");
 	}
 	
 	public void register(String email,String password){
@@ -47,5 +51,7 @@ public class Test {
 		Probe probe=new Probe(user,probeUuid,probeToken);
 		
 		System.out.println(probe.getUrl());
+		
+		probe.sendTestResult("http://korikisulda.net/null/", 200, "ok", "-1.0", "Dodgy Dave's value ISP", "192.168.0");
 	}
 }

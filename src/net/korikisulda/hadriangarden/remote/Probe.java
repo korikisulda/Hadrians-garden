@@ -79,4 +79,39 @@ public class Probe {
             return json.getString("url");
         else return null;
 	}
+	
+	public void sendTestResult(final String url,final int status,final String determinedSimpleStatus,final String config,final String networkName, final String ip){
+		ConvenientPost post=new ConvenientPost(){{
+			String date=getDate();
+			
+			setUrl("http://korikisulda.net/api/1.2/response/httpt");
+			
+			add("probe_uuid",getUuid());
+			add("url",url);
+			add("config",config);
+			
+			add("ip_network",ip);
+			add("network_name",networkName);
+			
+			add("status",determinedSimpleStatus);
+			add("http_status",String.valueOf(status));
+			add("date",date);
+			
+			
+			add("signature",sign(
+				getUuid() + ":" +
+				url + ":" +
+				determinedSimpleStatus + ":" +
+				date + ":" +
+				config
+				
+				,getToken()
+				));
+		}};
+		
+		if(!post.execute()) return;
+
+		
+		System.out.println(post.getResult());
+	}
 }
