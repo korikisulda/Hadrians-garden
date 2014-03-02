@@ -5,6 +5,10 @@ import net.korikisulda.hadriangarden.http.ConvenientGet;
 import net.korikisulda.hadriangarden.http.ConvenientPost;
 import org.json.JSONObject;
 
+/**
+ * Represents the user, can be used to initially register, get current status, and is needed for registering
+ * probes.
+ */
 public class User {
 	
 	private String token="";
