@@ -21,7 +21,7 @@ public abstract class ConvenientRequest {
     protected CloseableHttpClient httpclient= httpBuilder.build();
     
     protected String accept="application/json";
-    protected String agent="Claire Perry";
+    protected String agent="Mozilla/5.0 (Java) Hadrian's Garden/1.2"; //Was claire perry. Damn you, Richard ;D
     
     protected String URL;
     protected String result;
