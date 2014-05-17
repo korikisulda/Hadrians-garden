@@ -9,6 +9,8 @@ import org.json.JSONObject;
  * You'll need a User to initialise this.
  */
 public class Probe {
+	public static final String domain="http://korikisulda.net/";
+	
 	private String uuid;
 	private String token;
 	private User user;
@@ -50,7 +52,7 @@ public class Probe {
 		
 		ConvenientPost post=new ConvenientPost(){{
 			String probeUuid=md5sum(seed + "-" + user.getProbeToken());
-			setUrl("http://korikisulda.net/api/1.2/register/probe");
+			setUrl(domain+"api/1.2/register/probe");
 			add("email",email);
 			add("probe_seed",seed);
 			add("probe_type",probeType.getName());
@@ -99,7 +101,7 @@ public class Probe {
 	 */
 	public String getUrl(){
 		ConvenientGet get=new ConvenientGet(){{
-			setUrl("http://korikisulda.net/api/1.2/request/httpt");
+			setUrl(domain+"api/1.2/request/httpt");
 			add("signature",sign(getUuid(),getToken()));
 			add("probe_uuid",getUuid());
 		}};
@@ -130,7 +132,7 @@ public class Probe {
 		ConvenientPost post=new ConvenientPost(){{
 			String date=getDate();
 			
-			setUrl("http://korikisulda.net/api/1.2/response/httpt");
+			setUrl(domain+"api/1.2/response/httpt");
 			
 			add("probe_uuid",getUuid());
 			add("url",url);
