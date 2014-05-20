@@ -9,11 +9,12 @@ import org.json.JSONObject;
  * You'll need a User to initialise this.
  */
 public class Probe {
-	public static final String domain="http://korikisulda.net/";
+	public static final String domain="https://api.blocked.org.uk/";
 	
 	private String uuid;
 	private String token;
 	private User user;
+	private String network;
 	
 	/**
 	 * Constructs a probe that has already been registered before
@@ -52,7 +53,7 @@ public class Probe {
 		
 		ConvenientPost post=new ConvenientPost(){{
 			String probeUuid=md5sum(seed + "-" + user.getProbeToken());
-			setUrl(domain+"api/1.2/register/probe");
+			setUrl(domain+"1.2/register/probe");
 			add("email",email);
 			add("probe_seed",seed);
 			add("probe_type",probeType.getName());
@@ -95,15 +96,24 @@ public class Probe {
 		return token;
 	}
 	
+	public String getNetwork(){
+		return network;
+	}
+	
+	public void setNetwork(String network){
+		this.network=network;
+	}
+	
 	/**
 	 * Gets a URL the backend wants us to take a look at
 	 * @return URL returned by backend
 	 */
 	public String getUrl(){
 		ConvenientGet get=new ConvenientGet(){{
-			setUrl(domain+"api/1.2/request/httpt");
+			setUrl(domain+"1.2/request/httpt");
 			add("signature",sign(getUuid(),getToken()));
 			add("probe_uuid",getUuid());
+			add("network_name",getNetwork());
 		}};
 		
 		if(!get.execute()) return null;
@@ -132,7 +142,7 @@ public class Probe {
 		ConvenientPost post=new ConvenientPost(){{
 			String date=getDate();
 			
-			setUrl(domain+"api/1.2/response/httpt");
+			setUrl(domain+"1.2/response/httpt");
 			
 			add("probe_uuid",getUuid());
 			add("url",url);

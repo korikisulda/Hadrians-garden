@@ -10,7 +10,7 @@ import org.json.JSONObject;
  * probes.
  */
 public class User {
-	public static final String domain="http://korikisulda.net/";
+	public static final String domain="https://api.blocked.org.uk/";
 	
 	private String token="";
 	private String email="";
@@ -75,13 +75,13 @@ public class User {
 	 */
 	private String registerUser(final String email,final String password){
 		ConvenientPost post=new ConvenientPost(){{
-			setUrl(domain+"api/1.2/register/user");
+			setUrl(domain+"1.2/register/user");
 			add("email",email);
 			add("password",password);
 		}};
 		
 		if(!post.execute()) return null;
-		
+		System.out.println(post.getResult());
         JSONObject json = post.getResultAsJson();
 
         if(json.getBoolean("success")) return json.getString("secret");
@@ -95,7 +95,7 @@ public class User {
 	public int submitUrl(final String url){
 		final String token=getToken();
 		ConvenientPost post=new ConvenientPost(){{
-			setUrl(domain+"api/1.2/submit/url");
+			setUrl(domain+"1.2/submit/url");
 			add("email",email);
 			add("url",url);
 			add("signature",sign(url,token));
@@ -116,7 +116,7 @@ public class User {
 	public boolean getStatus(){
 		final String token=getToken();
 		ConvenientGet post=new ConvenientGet(){{
-			setUrl(domain+"api/1.2/status/user");
+			setUrl(domain+"1.2/status/user");
 			add("email",email);
 			add("date",getDate());
 			add("signature",sign(email + ":" + getDate(),token));
@@ -142,7 +142,7 @@ public class User {
 	public String requestProbeToken(){
 		final String token=getToken();
 		ConvenientPost post=new ConvenientPost(){{
-			setUrl(domain+"api/1.2/prepare/probe");
+			setUrl(domain+"1.2/prepare/probe");
 			add("email",email);
 			add("signature",sign(email + ":" + getDate(),token));
 			add("date",getDate());

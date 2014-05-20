@@ -14,13 +14,13 @@ public class Test {
 		
 		//Use this first,then comment it out and use the next, and so on. Make sure only one is not commented at a time..
 		//Make sure you fill in everything correctly. You need to register to get the token:
-		//register("emailhere","passwordhere");
+		//register("testprobe0@albatross.korikisulda.net","thisisapassword");
 		
 		//And now, we can make our very own probe!
-		//probeFun("emailhere","tokenhere");
-		
+		//probeFun("testprobe0@albatross.korikisulda.net","7SOmnuvEFMLXZ5AqsQJWM5iIZ3DQgxioq6KN");
+		//new User("testprobe0@albatross.korikisulda.net","7SOmnuvEFMLXZ5AqsQJWM5iIZ3DQgxioq6KN","").getStatus();
 		//But would that be nearly so fun if we didn't get URLs and submit results?
-		moreProbeFun("emailftw","oxgSuaWllWIbElqMoNcX4yUMnKj2iTFGqWyU","BFXCBh1Mk4cmbDa5iPycJaaXqav9eTMQ","lorFtFQjy3gzz5kYZpA0ljWNs6hGYhnkGO09","431bac6d088244be85e385d3fbfe75b8");
+		moreProbeFun("testprobe0@albatross.korikisulda.net","7SOmnuvEFMLXZ5AqsQJWM5iIZ3DQgxioq6KN","1IFnMA5N7pF2zbv0FVR9P7G5B34xdq5e","5SeCwN4JdyZ4xaf9F6sgxEdpRVAVl4hqWv2","b96d3d6aa35a7d45cb9479e79fd3c7a2");
 	}
 	
 	public void register(String email,String password){
@@ -49,9 +49,9 @@ public class Test {
 		User user=new User(email,userToken,userProbeToken);
 		
 		Probe probe=new Probe(user,probeUuid,probeToken);
-		
+		probe.setNetwork("I don't know what to put here");
 		System.out.println(probe.getUrl());
 		
-		probe.sendTestResult("http://korikisulda.net/null/", 200, "ok", "-1.0", "Dodgy Dave's value ISP", "192.168.0");
+		probe.sendTestResult("http://korikisulda.net/null/", 200, "ok", "-1.0", "I don't know what to put here", "192.168.0");
 	}
 }

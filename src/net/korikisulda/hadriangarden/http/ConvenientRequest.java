@@ -4,6 +4,7 @@ import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.TimeZone;
 
 import javax.crypto.Mac;
 import javax.crypto.spec.SecretKeySpec;
@@ -17,9 +18,9 @@ import org.apache.http.util.EntityUtils;
 import org.json.JSONObject;
 
 public abstract class ConvenientRequest {
+	
     protected HttpClientBuilder httpBuilder = HttpClientBuilder.create();
     protected CloseableHttpClient httpclient= httpBuilder.build();
-    
     protected String accept="application/json";
     protected String agent="Mozilla/5.0 (Java) Hadrian's Garden/1.2"; //Was claire perry. Damn you, Richard ;D
     
@@ -41,7 +42,6 @@ public abstract class ConvenientRequest {
     public boolean execute(){
     	try{
 	        HttpRequestBase httpRequest = getMethod();
-	        
 	        httpRequest.setHeader("Accept",accept);
 	        httpRequest.setHeader("User-Agent",agent);
 	        
@@ -51,7 +51,10 @@ public abstract class ConvenientRequest {
 	        success=true;
     	}catch(Exception e){
     		success=false;
+    		e.printStackTrace();
     	}
+    	System.out.println(status);
+    	System.out.println(result);
     	return success;
     }
     
@@ -133,6 +136,7 @@ public abstract class ConvenientRequest {
 	
 	protected String getDate(){
         SimpleDateFormat dateFormat = new SimpleDateFormat();
+        dateFormat.setTimeZone(TimeZone.getTimeZone("UTC"));
         Date date = new Date();
 		dateFormat.applyPattern("y-M-d H:m");
 		return dateFormat.format(date);
