@@ -3,6 +3,7 @@ package net.korikisulda.hadriangarden.test;
 import net.korikisulda.hadriangarden.remote.Probe;
 import net.korikisulda.hadriangarden.remote.ProbeType;
 import net.korikisulda.hadriangarden.remote.User;
+import net.korikisulda.hadriangarden.remote.credentials.UserCredentials;
 
 public class Test {
 	public static void main(String[] args){
@@ -30,14 +31,14 @@ public class Test {
 	}
 	
 	public void register(String email,String password){
-		System.out.println("Your token is [" + new User(email,password).getToken() + "].");
+		System.out.println("Your token is [" + new UserCredentials(email,password).registerUser().getKey() + "].");
 		System.out.println("Your account will be pending. It must be accepted before you can do fun things.");
 	}
 	
 	public void probeFun(String email, String token){
-		User user=new User(email,token,"");
+		User user=new User(new UserCredentials(email,token,""));
 		System.out.println("It seems that your account is " + (user.requestStatus()?"okay":"somehow wrong. Everything else will probably fail.") + ".");
-		System.out.println("Your user probe token is [" + user.requestProbeToken() + "].");
+		System.out.println("Your user probe token is [" + user.getUserCredentials().requestProbeToken() + "].");
 		
 		System.out.println("Let's make a probe! Country is gb, Seed 'ThisIsASeed' and we're pretending to be a Raspberry Pi.");
 		Probe probe=new Probe(user,"gb","ThisIsASeed",ProbeType.RASPBERRY_PI);
@@ -52,7 +53,7 @@ public class Test {
 	}
 	
 	public Probe moreProbeFun(String email,String userToken,String userProbeToken,String probeToken, String probeUuid){
-		User user=new User(email,userToken,userProbeToken);
+		User user=new User(new UserCredentials(email,userToken,userProbeToken));
 		
 		Probe probe=new Probe(user,probeUuid,probeToken);
 		probe.setNetwork("I don't know what to put here");

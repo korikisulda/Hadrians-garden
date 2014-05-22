@@ -3,6 +3,8 @@ package net.korikisulda.hadriangarden.remote;
 
 import net.korikisulda.hadriangarden.http.ConvenientGet;
 import net.korikisulda.hadriangarden.http.ConvenientPost;
+import net.korikisulda.hadriangarden.remote.credentials.UserCredentials;
+
 import org.json.JSONObject;
 
 /**
@@ -10,38 +12,23 @@ import org.json.JSONObject;
  * probes.
  */
 public class User {
+	private UserCredentials userCredentials;
+	/**
+	 * Construct a new User.
+	 * @param userCredentials Credentials corresponding to the user either in the database, or to be created.
+	 */
+	public User(UserCredentials userCredentials){
+		this.userCredentials=userCredentials;
+	}
+	
 	public static final String domain="https://api.blocked.org.uk/";
 	
-	private String token="";
-	private String email="";
-	private String probeToken="";
 	/**
-	 * Constructs a user with an email address and password. This will cause the user to be registered
-	 * With the backend. Use getToken() after this, and make sure you save the token.
-	 * @param email Email address of user
-	 * @param password Password of user
+	 * Get the credentials associated with this user
+	 * @return Credentials corresponding to this user
 	 */
-	public User(String email,String password){
-		this.token=registerUser(email,password);
-		this.setEmail(email);
-	}
-	/**
-	 * Constructs a user with a secret provided by the server (I call it a token).
-	 * You must provide the email address using setEmail() after this.
-	 * @param token Shared secret issued by server
-	 */
-	public User(String email,String token,String probeToken){
-		this.email=email;
-		this.token=token;
-		this.probeToken=probeToken;
-	}
-	
-	/**
-	 * Sets the email address. This is necessary for most user functions.
-	 * @param email Email address of user
-	 */
-	public void setEmail(String email){
-		this.email=email;
+	public UserCredentials getUserCredentials(){
+		return userCredentials;
 	}
 	
 	/**
@@ -49,14 +36,15 @@ public class User {
 	 * @return Token for this user. Null if registration failed.
 	 */
 	public String getToken(){
-		return token;
+		return userCredentials.getToken();
 	}
 	
 	/**
-	 * 
+	 * Gets the probe secret associated with this user. You need it to make new probes.
+	 * @return Probe token
 	 */
 	public String getProbeToken(){
-		return probeToken;
+		return userCredentials.getProbeToken();
 	}
 	
 	/**
@@ -64,29 +52,9 @@ public class User {
 	 * @return Email address
 	 */
 	public String getEmail() {
-		return email;
+		return userCredentials.getEmail();
 	}
 	
-	/**
-	 * Registers a user with an email address and password
-	 * @param email Email address of user. This should probably be valid, but the backend doesn't care at the moment
-	 * @param password The password the user supplies.
-	 * @return String of the secret. Null if something went horribly wrong.
-	 */
-	private String registerUser(final String email,final String password){
-		ConvenientPost post=new ConvenientPost(){{
-			setUrl(domain+"1.2/register/user");
-			add("email",email);
-			add("password",password);
-		}};
-		
-		if(!post.execute()) return null;
-		System.out.println(post.getResult());
-        JSONObject json = post.getResultAsJson();
-
-        if(json.getBoolean("success")) return json.getString("secret");
-        else return null;
-	}
 	/**
 	 * Submit a URL for analysis, and get the ID.
 	 * @param url URL to submit
@@ -96,7 +64,7 @@ public class User {
 		final String token=getToken();
 		ConvenientPost post=new ConvenientPost(){{
 			setUrl(domain+"1.2/submit/url");
-			add("email",email);
+			add("email",getEmail());
 			add("url",url);
 			add("signature",sign(url,token));
 		}};
@@ -117,12 +85,10 @@ public class User {
 		final String token=getToken();
 		ConvenientGet post=new ConvenientGet(){{
 			setUrl(domain+"1.2/status/user");
-			add("email",email);
+			add("email",getEmail());
 			add("date",getDate());
-			add("signature",sign(email + ":" + getDate(),token));
+			add("signature",sign(getEmail() + ":" + getDate(),token));
 		}};
-
-
 		
 		if(!post.execute()) return false;
 		
@@ -135,30 +101,5 @@ public class User {
         else return false;
 	}
 	
-	/**
-	 * Requests a probe secret from the API
-	 * @return Probe secret, or null, if failure
-	 */
-	public String requestProbeToken(){
-		final String token=getToken();
-		ConvenientPost post=new ConvenientPost(){{
-			setUrl(domain+"1.2/prepare/probe");
-			add("email",email);
-			add("signature",sign(email + ":" + getDate(),token));
-			add("date",getDate());
-		}};
-		
-		if(!post.execute()) return null;
-		
-		System.out.println(post.getResult());
-        JSONObject json = post.getResultAsJson();
-
-        if(json.getBoolean("success"))
-        {
-        	probeToken=json.getString("probe_hmac");
-            return json.getString("probe_hmac");
-        }
-        else return null;
-	}
 
 }
