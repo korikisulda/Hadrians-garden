@@ -113,7 +113,7 @@ public class User {
 	 * Gets the user status (successfully authenticated?)
 	 * @return True if the user is successfully authenticated and all is well
 	 */
-	public boolean getStatus(){
+	public boolean requestStatus(){
 		final String token=getToken();
 		ConvenientGet post=new ConvenientGet(){{
 			setUrl(domain+"1.2/status/user");

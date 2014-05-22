@@ -108,7 +108,7 @@ public class Probe {
 	 * Gets a URL the backend wants us to take a look at
 	 * @return URL returned by backend
 	 */
-	public String getUrl(){
+	public String requestUrl(){
 		ConvenientGet get=new ConvenientGet(){{
 			setUrl(domain+"1.2/request/httpt");
 			add("signature",sign(getUuid(),getToken()));
@@ -130,7 +130,7 @@ public class Probe {
 	 * I'm going to start changing the whole thing to be more OO though. I should be ashamed of how I'm
 	 * coding this as a Java programmer ;D 
 	 */
-	public String getISPMeta(){
+	public String requestISPMeta(){
 		ConvenientGet get=new ConvenientGet(){{
 			setUrl(domain+"1.2/status/ip");
 			add("date",getDate());

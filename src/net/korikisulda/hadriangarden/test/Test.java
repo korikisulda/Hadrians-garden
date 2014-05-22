@@ -26,7 +26,7 @@ public class Test {
 			"1IFnMA5N7pF2zbv0FVR9P7G5B34xdq5e",		/*User probe token: `probe_hmac`*/
 			"32V6TIHxLBCWvnugsECWbaisdzSF2st5vobp",	/*Probe token:	`secret`*/
 			"e22d82a55c52946a16cdb38aa9810085"		/*Probe UUID*/
-		).getISPMeta();
+		).requestISPMeta();
 	}
 	
 	public void register(String email,String password){
@@ -36,7 +36,7 @@ public class Test {
 	
 	public void probeFun(String email, String token){
 		User user=new User(email,token,"");
-		System.out.println("It seems that your account is " + (user.getStatus()?"okay":"somehow wrong. Everything else will probably fail.") + ".");
+		System.out.println("It seems that your account is " + (user.requestStatus()?"okay":"somehow wrong. Everything else will probably fail.") + ".");
 		System.out.println("Your user probe token is [" + user.requestProbeToken() + "].");
 		
 		System.out.println("Let's make a probe! Country is gb, Seed 'ThisIsASeed' and we're pretending to be a Raspberry Pi.");
@@ -56,9 +56,9 @@ public class Test {
 		
 		Probe probe=new Probe(user,probeUuid,probeToken);
 		probe.setNetwork("I don't know what to put here");
-		System.out.println(probe.getUrl());
+		System.out.println(probe.requestUrl());
 		
-		probe.sendTestResult("http://korikisulda.net/null/", 200, "ok", "-1.0", "I don't know what to put here", "192.168.0");
+		//probe.sendTestResult("http://korikisulda.net/null/", 200, "ok", "-1.0", "I don't know what to put here", "192.168.0");
 		return probe;
 	}
 }
