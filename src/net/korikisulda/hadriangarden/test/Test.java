@@ -37,7 +37,7 @@ public class Test {
 	
 	public void probeFun(String email, String token){
 		User user=new User(new UserCredentials(email,token,""));
-		System.out.println("It seems that your account is " + (user.requestStatus()?"okay":"somehow wrong. Everything else will probably fail.") + ".");
+		System.out.println("It seems that your account is " + (user.requestStatus().isSuccess()?"okay":"somehow wrong. Everything else will probably fail.") + ".");
 		System.out.println("Your user probe token is [" + user.getUserCredentials().requestProbeToken() + "].");
 		
 		System.out.println("Let's make a probe! Country is gb, Seed 'ThisIsASeed' and we're pretending to be a Raspberry Pi.");

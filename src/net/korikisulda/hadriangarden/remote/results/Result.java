@@ -2,7 +2,7 @@ package net.korikisulda.hadriangarden.remote.results;
 
 import net.korikisulda.hadriangarden.http.ConvenientRequest;
 
-public abstract class Result {
+public class Result {
 
 	public Result(boolean success,ConvenientRequest originalRequest) {
 		this.success=success;

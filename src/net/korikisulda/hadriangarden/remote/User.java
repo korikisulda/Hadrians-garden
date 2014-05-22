@@ -4,6 +4,7 @@ package net.korikisulda.hadriangarden.remote;
 import net.korikisulda.hadriangarden.http.ConvenientGet;
 import net.korikisulda.hadriangarden.http.ConvenientPost;
 import net.korikisulda.hadriangarden.remote.credentials.UserCredentials;
+import net.korikisulda.hadriangarden.remote.results.Result;
 
 import org.json.JSONObject;
 
@@ -81,7 +82,7 @@ public class User {
 	 * Gets the user status (successfully authenticated?)
 	 * @return True if the user is successfully authenticated and all is well
 	 */
-	public boolean requestStatus(){
+	public Result requestStatus(){
 		final String token=getToken();
 		ConvenientGet post=new ConvenientGet(){{
 			setUrl(domain+"1.2/status/user");
@@ -90,15 +91,10 @@ public class User {
 			add("signature",sign(getEmail() + ":" + getDate(),token));
 		}};
 		
-		if(!post.execute()) return false;
+		if(!post.execute()) return new Result(false,post);
 		
         JSONObject json = post.getResultAsJson();
-
-        if(json.getBoolean("success"))
-        {
-            return true;
-        }
-        else return false;
+        return new Result(json.getBoolean("success"),post);
 	}
 	
 
