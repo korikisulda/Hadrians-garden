@@ -85,7 +85,8 @@ public abstract class ConvenientRequest {
     }
     
     /**
-     * Sets the User-Agent header. Claire Perry by default (Sorry, couldn't resist..)
+     * Sets the User-Agent header. _was_ Claire Perry by default. Now it makes sense and is responsible.
+     * Come on, I'm still legally a child, aren't I allowed to have fun? ;D
      * @param agent New user-agent
      */
     public void setAgent(String agent){

@@ -69,7 +69,7 @@ public class UserCredentials {
 		 * Registers a user with an email address and password
 		 * @param email Email address of user. This should probably be valid, but the backend doesn't care at the moment
 		 * @param password The password the user supplies.
-		 * @return String of the secret. Null if something went horribly wrong.
+		 * @return AuthenticationResult containing success status, and the key
 		 */
 		public AuthenticationResult registerUser(){
 			ConvenientPost post=new ConvenientPost(){{
@@ -78,19 +78,17 @@ public class UserCredentials {
 				add("password",password);
 			}};
 			
-			if(!post.execute()) return null;
-			System.out.println(post.getResult());
-	        JSONObject json = post.getResultAsJson();
+			if(!post.execute()) return new AuthenticationResult("",false,post);
 
-	        if(json.getBoolean("success")) return new AuthenticationResult(json.getString("secret"),true);
-	        else return null;
+	        JSONObject json = post.getResultAsJson();
+	        return new AuthenticationResult(json.getString("secret"),json.getBoolean("success"),post);
 		}
 		
 		/**
 		 * Requests a probe secret from the API
-		 * @return Probe secret, or null, if failure
+		 * @return AuthenticationResult representing success, and containing key if successful
 		 */
-		public String requestProbeToken(){
+		public AuthenticationResult requestProbeToken(){
 			final String token=getToken();
 			ConvenientPost post=new ConvenientPost(){{
 				setUrl(domain+"1.2/prepare/probe");
@@ -99,17 +97,11 @@ public class UserCredentials {
 				add("date",getDate());
 			}};
 			
-			if(!post.execute()) return null;
+			if(!post.execute()) return new AuthenticationResult("",false,post);
 			
-			System.out.println(post.getResult());
 	        JSONObject json = post.getResultAsJson();
-
-	        if(json.getBoolean("success"))
-	        {
-	        	probeToken=json.getString("probe_hmac");
-	            return json.getString("probe_hmac");
-	        }
-	        else return null;
+        	probeToken=json.getString("probe_hmac");
+	        return new AuthenticationResult(json.getString("probe_hmac"),json.getBoolean("success"),post);
 		}
 
 }
