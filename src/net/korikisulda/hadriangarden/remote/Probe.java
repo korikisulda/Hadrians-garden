@@ -125,6 +125,26 @@ public class Probe {
         else return null;
 	}
 	
+	/*
+	 * Works insofar as it gets the result from the remote end of things, and the sig verification is okay.
+	 * I'm going to start changing the whole thing to be more OO though. I should be ashamed of how I'm
+	 * coding this as a Java programmer ;D 
+	 */
+	public String getISPMeta(){
+		ConvenientGet get=new ConvenientGet(){{
+			setUrl(domain+"1.2/status/ip");
+			add("date",getDate());
+			add("signature",sign(getDate(),getToken()));
+			add("probe_uuid",getUuid());
+		}};
+		
+		if(!get.execute()) return null;
+		
+        if(get.getResultAsJson().getBoolean("success"))
+            return get.getResultAsJson().getString("ip") + get.getResultAsJson().getString("isp");
+        else return null;
+	}
+	
 	/**
 	 * Submits a URL test result to the remote backend.
 	 * We might need a prettier version at some point (after all, we can combine URL and status using

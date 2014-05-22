@@ -20,7 +20,13 @@ public class Test {
 		//probeFun("testprobe0@albatross.korikisulda.net","7SOmnuvEFMLXZ5AqsQJWM5iIZ3DQgxioq6KN");
 		//new User("testprobe0@albatross.korikisulda.net","7SOmnuvEFMLXZ5AqsQJWM5iIZ3DQgxioq6KN","").getStatus();
 		//But would that be nearly so fun if we didn't get URLs and submit results?
-		moreProbeFun("testprobe0@albatross.korikisulda.net","7SOmnuvEFMLXZ5AqsQJWM5iIZ3DQgxioq6KN","1IFnMA5N7pF2zbv0FVR9P7G5B34xdq5e","5SeCwN4JdyZ4xaf9F6sgxEdpRVAVl4hqWv2","b96d3d6aa35a7d45cb9479e79fd3c7a2");
+		moreProbeFun(
+			"testprobe0@albatross.korikisulda.net",
+			"HrnPLrRJe5bmLPHRzRmXsYYxAB9sgUYX",		/*User token*/
+			"1IFnMA5N7pF2zbv0FVR9P7G5B34xdq5e",		/*User probe token: `probe_hmac`*/
+			"32V6TIHxLBCWvnugsECWbaisdzSF2st5vobp",	/*Probe token:	`secret`*/
+			"e22d82a55c52946a16cdb38aa9810085"		/*Probe UUID*/
+		).getISPMeta();
 	}
 	
 	public void register(String email,String password){
@@ -45,7 +51,7 @@ public class Test {
 		}
 	}
 	
-	public void moreProbeFun(String email,String userToken,String userProbeToken,String probeToken, String probeUuid){
+	public Probe moreProbeFun(String email,String userToken,String userProbeToken,String probeToken, String probeUuid){
 		User user=new User(email,userToken,userProbeToken);
 		
 		Probe probe=new Probe(user,probeUuid,probeToken);
@@ -53,5 +59,6 @@ public class Test {
 		System.out.println(probe.getUrl());
 		
 		probe.sendTestResult("http://korikisulda.net/null/", 200, "ok", "-1.0", "I don't know what to put here", "192.168.0");
+		return probe;
 	}
 }
