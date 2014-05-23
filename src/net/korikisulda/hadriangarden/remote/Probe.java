@@ -2,6 +2,8 @@ package net.korikisulda.hadriangarden.remote;
 
 import net.korikisulda.hadriangarden.http.ConvenientGet;
 import net.korikisulda.hadriangarden.http.ConvenientPost;
+import net.korikisulda.hadriangarden.remote.credentials.ProbeCredentials;
+import net.korikisulda.hadriangarden.remote.results.IspResult;
 
 import org.json.JSONObject;
 /**
@@ -9,75 +11,17 @@ import org.json.JSONObject;
  * You'll need a User to initialise this.
  */
 public class Probe {
+	//private User user;
+	private ProbeCredentials probeCredentials;
+	public Probe(ProbeCredentials probeCredentials){
+		//this.user=probeCredentials.getUser();
+		this.probeCredentials=probeCredentials;
+	}
+	
 	public static final String domain="https://api.blocked.org.uk/";
 	
-	private String uuid;
-	private String token;
-	private User user;
-	private String network;
-	
-	/**
-	 * Constructs a probe that has already been registered before
-	 * @param userFor The user this is on behalf of
-	 * @param uuid Probe's UUID
-	 * @param probeSecret Probe's secret token
-	 */
-	public Probe(User userFor,String uuid, String probeSecret){
-		this.uuid=uuid;
-		this.token=probeSecret;
-		this.user=userFor;
-	}
-	
-	/**
-	 * Constructs and registers a probe for the first time
-	 * @param userFor User the probe is being constructed for. Ensure the user is fully registered and authorised
-	 * @param seed Probe seed. This can, afaik, be anything
-	 * @param country Two digit country code. ISO-something-or-other. We're in "gb"
-	 * @param probeType Type of probe
-	 */
-	public Probe(User userFor,String seed,String country,ProbeType probeType){
-		this(userFor,"","");
-		token=registerProbe(userFor.getEmail(),country,seed,probeType);
-	}
-	
-	/**
-	 * Surprisingly enough, this function registers a this probe. Used internally
-	 * @param email Email
-	 * @param country Two digit country code
-	 * @param seed Seed for UUID. Afaik, this can be pretty much anything
-	 * @param probeType The type of probe
-	 * @return Probe secret
-	 */
-	private String registerProbe(final String email,final String country,final String seed, final ProbeType probeType){
-		final Probe probe=this;
-		
-		ConvenientPost post=new ConvenientPost(){{
-			String probeUuid=md5sum(seed + "-" + user.getProbeToken());
-			setUrl(domain+"1.2/register/probe");
-			add("email",email);
-			add("probe_seed",seed);
-			add("probe_type",probeType.getName());
-			add("cc",country);
-			add("signature",sign(probeUuid,user.getToken()));
-			add("probe_uuid",probeUuid);
-			
-			probe.setUuid(probeUuid);
-		}};
-		
-		if(!post.execute()) return null;
-		System.out.println(post.getResult());
-        JSONObject json = post.getResultAsJson();
-
-        if(json.getBoolean("success")) return json.getString("secret");
-        else return null;
-	}
-	
-	/**
-	 * Sets the probe UUID. Used internally.
-	 * @param uuid New probe UUID
-	 */
-	private void setUuid(String uuid){
-		this.uuid=uuid;
+	public ProbeCredentials getCredentials(){
+		return probeCredentials;
 	}
 	
 	/**
@@ -85,7 +29,7 @@ public class Probe {
 	 * @return Probe UUID
 	 */
 	public String getUuid(){
-		return uuid;
+		return getCredentials().getUuid();
 	}
 	
 	/**
@@ -93,15 +37,7 @@ public class Probe {
 	 * @return Secret token
 	 */
 	public String getToken(){
-		return token;
-	}
-	
-	public String getNetwork(){
-		return network;
-	}
-	
-	public void setNetwork(String network){
-		this.network=network;
+		return getCredentials().getToken();
 	}
 	
 	/**
@@ -113,7 +49,7 @@ public class Probe {
 			setUrl(domain+"1.2/request/httpt");
 			add("signature",sign(getUuid(),getToken()));
 			add("probe_uuid",getUuid());
-			add("network_name",getNetwork());
+			add("network_name",lastIspRequest.getIsp());
 		}};
 		
 		if(!get.execute()) return null;
@@ -125,12 +61,13 @@ public class Probe {
         else return null;
 	}
 	
-	/*
-	 * Works insofar as it gets the result from the remote end of things, and the sig verification is okay.
-	 * I'm going to start changing the whole thing to be more OO though. I should be ashamed of how I'm
-	 * coding this as a Java programmer ;D 
+	private IspResult lastIspRequest;
+	
+	/**
+	 * Request the ISP meta from the middleware
+	 * @return IspResult representing success state, and IP/ISP
 	 */
-	public String requestISPMeta(){
+	public IspResult requestISPMeta(){
 		ConvenientGet get=new ConvenientGet(){{
 			setUrl(domain+"1.2/status/ip");
 			add("date",getDate());
@@ -138,11 +75,10 @@ public class Probe {
 			add("probe_uuid",getUuid());
 		}};
 		
-		if(!get.execute()) return null;
+		if(!get.execute()) return new IspResult(false,get);
 		
-        if(get.getResultAsJson().getBoolean("success"))
-            return get.getResultAsJson().getString("ip") + get.getResultAsJson().getString("isp");
-        else return null;
+		if(get.getResultAsJson().getBoolean("success")||lastIspRequest==null) lastIspRequest=new IspResult(get.getResultAsJson().getBoolean("success"),get);
+        return new IspResult(get.getResultAsJson().getBoolean("success"),get);
 	}
 	
 	/**
